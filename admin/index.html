@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Catacombs Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:light;--ink:#171714;--paper:#f0eee6;--panel:#fffdf6;--red:#bd2929;--line:#d6d2c8;--muted:#6e6c65}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font:15px "DM Sans",sans-serif}
+    button,input,textarea,select{font:inherit}
+    button{cursor:pointer}
+    .topbar{background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;padding:18px max(5vw,20px)}
+    .brand{font:32px "Bebas Neue",sans-serif;letter-spacing:.02em}
+    .brand span,.eyebrow{color:var(--red)}
+    .top-actions{display:flex;align-items:center;gap:12px}
+    .wrap{max-width:1120px;margin:0 auto;padding:32px 22px 70px}
+    h1,h2,h3,p{margin-top:0}
+    h1{font:clamp(38px,7vw,72px)/.95 "Bebas Neue",sans-serif;margin-bottom:8px}
+    h2{font:32px "Bebas Neue",sans-serif}
+    h3{font-size:17px}
+    .eyebrow{font:12px "DM Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+    .subtle{color:var(--muted);line-height:1.6}
+    .card{background:var(--panel);border:1px solid var(--line);padding:22px;margin:18px 0}
+    .hidden{display:none!important}
+    .button{border:0;background:var(--red);color:white;padding:12px 16px;font-weight:700}
+    .button.secondary{background:var(--ink)}
+    .button.quiet{background:transparent;color:var(--ink);border:1px solid var(--line)}
+    .button.danger{background:#7d1919}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin:28px 0}
+    .tabs button{background:transparent;border:1px solid var(--line);padding:10px 14px}
+    .tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+    input,textarea,select{width:100%;border:1px solid #aaa69b;background:white;color:var(--ink);padding:11px 12px}
+    textarea{min-height:100px;resize:vertical}
+    input[type="checkbox"]{width:auto;margin-right:8px}
+    input[type="file"]{padding:9px}
+    .field{margin-bottom:14px}
+    .check-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0 16px}
+    .check-row label{display:flex;align-items:center;margin:0}
+    .item-list{display:grid;gap:10px}
+    .item{display:flex;align-items:center;justify-content:space-between;gap:15px;border:1px solid var(--line);padding:14px}
+    .item small{display:block;color:var(--muted);margin-top:4px}
+    .item-actions{display:flex;gap:8px;flex-shrink:0}
+    .item-actions button{padding:8px 10px}
+    .preview{display:block;width:min(100%,520px);max-height:230px;object-fit:cover;background:#ddd;margin-top:12px}
+    .notice{padding:12px 14px;background:#ece8dd;margin:14px 0;color:var(--ink)}
+    .notice.error{background:#f8dfdc;color:#641919}
+    .notice.success{background:#dff0df;color:#174e27}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;min-width:560px}
+    th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);font-size:13px}
+    th{font-family:"DM Mono",monospace;text-transform:uppercase;font-size:11px}
+    .login-card{max-width:450px;margin:12vh auto}
+    .login-card form{margin-top:20px}
+    .back-link{color:var(--paper);text-decoration:none;font-size:13px}
+    @media(max-width:680px){
+      .grid{grid-template-columns:1fr}
+      .topbar{align-items:flex-start}
+      .top-actions{flex-direction:column;align-items:flex-end}
+      .item{align-items:flex-start;flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">CATACOMBS<span>.</span> / ADMIN</div>
+    <div class="top-actions">
+      <a class="back-link" href="/">View website ↗</a>
+      <button id="logoutButton" class="button secondary hidden" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="loginPanel" class="card login-card">
+      <div class="eyebrow">Private access</div>
+      <h1>ADMIN<br>DASHBOARD.</h1>
+      <p class="subtle">Enter the private access code to manage Catacombs events, residents and the mailing list.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="accessCode">Access code</label>
+          <input id="accessCode" name="code" type="password" autocomplete="current-password" required maxlength="256">
+        </div>
+        <button class="button" type="submit">Sign in</button>
+      </form>
+      <div id="loginMessage" class="notice hidden" role="status"></div>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="eyebrow">Catacombs / Content management</div>
+      <h1>YOUR SITE,<br>YOUR NIGHTS.</h1>
+      <p class="subtle">Changes are saved to the live content database when you choose Save all changes.</p>
+      <div id="dashboardMessage" class="notice hidden" role="status"></div>
+
+      <nav class="tabs" aria-label="Dashboard sections">
+        <button type="button" data-tab="events" aria-selected="true">Events</button>
+        <button type="button" data-tab="residents" aria-selected="false">Residents</button>
+        <button type="button" data-tab="backgrounds" aria-selected="false">Backgrounds</button>
+        <button type="button" data-tab="signups" aria-selected="false">Email signups</button>
+        <button id="saveButton" class="button" type="button">Save all changes</button>
+      </nav>
+
+      <section id="panel-events" class="tab-panel">
+        <div class="card">
+          <div class="eyebrow">Create and edit</div>
+          <h2>Events</h2>
+          <p class="subtle">Add future and past events here. The event date determines where it appears on the public site.</p>
+          <div id="eventList" class="item-list"></div>
+        </div>
+        <form id="eventForm" class="card">
+          <input id="eventId" type="hidden">
+          <h2 id="eventFormTitle">Add an event</h2>
+          <div class="grid">
+            <div class="field"><label for="eventTitle">Event name *</label><input id="eventTitle" required maxlength="200"></div>
+            <div class="field"><label for="eventDate">Date *</label><input id="eventDate" type="date" required></div>
+            <div class="field"><label for="eventCategory">Category</label><input id="eventCategory" maxlength="120" placeholder="Techno · Live"></div>
+            <div class="field"><label for="eventLocation">Venue</label><input id="eventLocation" maxlength="240" placeholder="Venue, Cork"></div>
+            <div class="field"><label for="eventPrice">Ticket price (€)</label><input id="eventPrice" type="number" min="0" step="0.01" value="0"></div>
+            <div class="field"><label for="eventImage">Event image URL</label><input id="eventImage" type="url" placeholder="https://..."></div>
+            <div class="field"><label for="eventImageFile">Or upload an image (JPG, PNG, WebP, AVIF; max 5 MB)</label><input id="eventImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></div>
+            <div class="field"><label for="eventArtists">Line-up</label><input id="eventArtists" maxlength="1000"></div>
+            <div class="field"><label for="eventRaUrl">Resident Advisor event link</label><input id="eventRaUrl" type="url" placeholder="https://ra.co/events/..."></div>
+            <div class="field"><label for="eventInstagramUrl">Instagram event link</label><input id="eventInstagramUrl" type="url" placeholder="https://www.instagram.com/..."></div>
+          </div>
+          <div class="field"><label for="eventDescription">Description</label><textarea id="eventDescription"></textarea></div>
+          <div class="check-row">
+            <label><input id="eventFeatured" type="checkbox">Feature on the homepage</label>
+            <label><input id="eventVisible" type="checkbox" checked>Show on the public site</label>
+          </div>
+          <img id="eventImagePreview" class="preview hidden" alt="Event image preview">
+          <button class="button" type="submit">Add event</button>
+          <button id="eventCancel" class="button quiet" type="button">Clear form</button>
+        </form>
+      </section>
+
+      <section id="panel-residents" class="tab-panel hidden">
+        <div class="card">
+          <div class="eyebrow">People behind the nights</div>
+          <h2>Residents</h2>
+          <div id="residentList" class="item-list"></div>
+        </div>
+        <form id="residentForm" class="card">
+          <input id="residentId" type="hidden">
+          <h2 id="residentFormTitle">Add a resident</h2>
+          <div class="grid">
+            <div class="field"><label for="residentName">Name *</label><input id="residentName" required maxlength="160"></div>
+            <div class="field"><label for="residentRole">Role</label><input id="residentRole" maxlength="160" placeholder="DJ / Producer"></div>
+            <div class="field"><label for="residentImage">Portrait image URL</label><input id="residentImage" type="url" placeholder="https://..."></div>
+            <div class="field"><label for="residentImageFile">Or upload a portrait (max 5 MB)</label><input id="residentImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></div>
+          </div>
+          <div class="field"><label for="residentBio">Short bio</label><textarea id="residentBio"></textarea></div>
+          <div class="check-row"><label><input id="residentVisible" type="checkbox" checked>Show on the public site</label></div>
+          <img id="residentImagePreview" class="preview hidden" alt="Resident image preview">
+          <button class="button" type="submit">Add resident</button>
+          <button id="residentCancel" class="button quiet" type="button">Clear form</button>
+        </form>
+      </section>
+
+      <section id="panel-backgrounds" class="tab-panel hidden">
+        <form id="backgroundForm" class="card">
+          <div class="eyebrow">Choose imagery</div>
+          <h2>Background images</h2>
+          <p class="subtle">Upload an image or paste a public HTTPS image URL. Images are stored in the site's public media bucket.</p>
+          <div class="field">
+            <label for="heroImageUrl">Homepage hero background</label>
+            <input id="heroImageUrl" type="url" placeholder="https://...">
+            <label for="heroImageFile" style="margin-top:10px">Upload hero background</label>
+            <input id="heroImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif">
+            <img id="heroImagePreview" class="preview hidden" alt="Homepage background preview">
+          </div>
+          <div class="field">
+            <label for="communityImageUrl">Community section background (optional)</label>
+            <input id="communityImageUrl" type="url" placeholder="https://...">
+            <label for="communityImageFile" style="margin-top:10px">Upload community background</label>
+            <input id="communityImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif">
+            <img id="communityImagePreview" class="preview hidden" alt="Community background preview">
+          </div>
+        </form>
+      </section>
+
+      <section id="panel-signups" class="tab-panel hidden">
+        <div class="card">
+          <div class="eyebrow">Catacombs / Community</div>
+          <h2>Email signups</h2>
+          <p class="subtle">Only people who opted in are listed. Export a CSV or remove an address when asked.</p>
+          <button id="exportSignups" class="button secondary" type="button">Export CSV</button>
+          <div id="signupList" class="table-wrap" style="margin-top:18px"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const state = { events: [], residents: [], settings: {}, signups: [] };
+    const $ = id => document.getElementById(id);
+    const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[character]);
+
+    async function api(url, options = {}) {
+      const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: { ...(options.body instanceof FormData ? {} : { "content-type": "application/json" }), ...options.headers }
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(result.error || `Request failed (${response.status}).`);
+        error.status = response.status;
+        throw error;
+      }
+      return result;
+    }
+
+    function showMessage(element, message, kind = "") {
+      element.textContent = message;
+      element.className = `notice ${kind}`.trim();
+      element.classList.remove("hidden");
+    }
+
+    function clearMessage(element) {
+      element.textContent = "";
+      element.className = "notice hidden";
+    }
+
+    function switchTab(name) {
+      document.querySelectorAll("[data-tab]").forEach(button => {
+        button.setAttribute("aria-selected", String(button.dataset.tab === name));
+      });
+      document.querySelectorAll(".tab-panel").forEach(panel => {
+        panel.classList.toggle("hidden", panel.id !== `panel-${name}`);
+      });
+    }
+
+    function dateLabel(date) {
+      const eventDate = new Date(`${date}T12:00:00`);
+      return `${eventDate.toLocaleDateString("en-IE")} · ${eventDate >= new Date(new Date().setHours(0,0,0,0)) ? "Upcoming" : "Past"}`;
+    }
+
+    function renderEvents() {
+      const rows = [...state.events].sort((a, b) => b.date.localeCompare(a.date));
+      $("eventList").innerHTML = rows.length ? rows.map(event => `
+        <article class="item">
+          <div><strong>${escapeHtml(event.title)}</strong><small>${escapeHtml(dateLabel(event.date))}${event.featured ? " · Featured" : ""}${event.visible ? "" : " · Hidden"}</small></div>
+          <div class="item-actions">
+            <button type="button" class="button quiet" data-edit-event="${escapeHtml(event.id)}">Edit</button>
+            <button type="button" class="button danger" data-delete-event="${escapeHtml(event.id)}">Delete</button>
+          </div>
+        </article>`).join("") : '<p class="subtle">No events yet. Add the first event below.</p>';
+    }
+
+    function renderResidents() {
+      const rows = [...state.residents].sort((a, b) => a.sortOrder - b.sortOrder);
+      $("residentList").innerHTML = rows.length ? rows.map(resident => `
+        <article class="item">
+          <div><strong>${escapeHtml(resident.name)}</strong><small>${escapeHtml(resident.role)}${resident.visible ? "" : " · Hidden"}</small></div>
+          <div class="item-actions">
+            <button type="button" class="button quiet" data-edit-resident="${escapeHtml(resident.id)}">Edit</button>
+            <button type="button" class="button danger" data-delete-resident="${escapeHtml(resident.id)}">Delete</button>
+          </div>
+        </article>`).join("") : '<p class="subtle">No residents yet. Add the first resident below.</p>';
+    }
+
+    function renderSignups() {
+      const rows = state.signups;
+      $("signupList").innerHTML = rows.length ? `
+        <table><thead><tr><th>Email</th><th>Opted in</th><th>Joined</th><th></th></tr></thead>
+        <tbody>${rows.map(entry => `
+          <tr>
+            <td>${escapeHtml(entry.email)}</td>
+            <td>${escapeHtml(new Date(entry.consented_at).toLocaleDateString("en-IE"))}</td>
+            <td>${escapeHtml(new Date(entry.created_at).toLocaleDateString("en-IE"))}</td>
+            <td><button class="button danger" type="button" data-delete-signup="${escapeHtml(entry.id)}">Remove</button></td>
+          </tr>`).join("")}</tbody></table>` : '<p class="subtle">No email signups yet.</p>';
+    }
+
+    function setPreview(inputId, previewId) {
+      const url = $(inputId).value.trim();
+      const preview = $(previewId);
+      if (!url) {
+        preview.removeAttribute("src");
+        preview.classList.add("hidden");
+        return;
+      }
+      try {
+        if (new URL(url).protocol !== "https:") throw new Error();
+        preview.src = url;
+        preview.classList.remove("hidden");
+      } catch {
+        preview.removeAttribute("src");
+        preview.classList.add("hidden");
+      }
+    }
+
+    async function uploadImage(fileInputId, targetInputId, previewId) {
+      const file = $(fileInputId).files[0];
+      if (!file) return;
+      const form = new FormData();
+      form.append("image", file);
+      const result = await api("/api/admin/upload", { method: "POST", body: form });
+      $(targetInputId).value = result.url;
+      $(fileInputId).value = "";
+      setPreview(targetInputId, previewId);
+    }
+
+    function formEvent(event = {}) {
+      $("eventId").value = event.id || "";
+      $("eventTitle").value = event.title || "";
+      $("eventDate").value = event.date || "";
+      $("eventCategory").value = event.category || "";
+      $("eventLocation").value = event.location || "";
+      $("eventPrice").value = event.price ?? 0;
+      $("eventImage").value = event.image || "";
+      $("eventArtists").value = event.artists || "";
+      $("eventRaUrl").value = event.raUrl || "";
+      $("eventInstagramUrl").value = event.instagramUrl || "";
+      $("eventDescription").value = event.description || "";
+      $("eventFeatured").checked = event.featured === true;
+      $("eventVisible").checked = event.visible !== false;
+      $("eventFormTitle").textContent = event.id ? "Edit event" : "Add an event";
+      $("eventForm").querySelector('[type="submit"]').textContent = event.id ? "Update event" : "Add event";
+      setPreview("eventImage", "eventImagePreview");
+    }
+
+    function formResident(resident = {}) {
+      $("residentId").value = resident.id || "";
+      $("residentName").value = resident.name || "";
+      $("residentRole").value = resident.role || "";
+      $("residentBio").value = resident.bio || "";
+      $("residentImage").value = resident.image || "";
+      $("residentVisible").checked = resident.visible !== false;
+      $("residentFormTitle").textContent = resident.id ? "Edit resident" : "Add a resident";
+      $("residentForm").querySelector('[type="submit"]').textContent = resident.id ? "Update resident" : "Add resident";
+      setPreview("residentImage", "residentImagePreview");
+    }
+
+    function loadSettings() {
+      $("heroImageUrl").value = state.settings.hero_image_url || "";
+      $("communityImageUrl").value = state.settings.community_image_url || "";
+      setPreview("heroImageUrl", "heroImagePreview");
+      setPreview("communityImageUrl", "communityImagePreview");
+    }
+
+    async function loadDashboard() {
+      const result = await api("/api/admin/data");
+      state.events = result.events || [];
+      state.residents = result.residents || [];
+      state.settings = result.settings || {};
+      state.signups = result.signups || [];
+      renderEvents();
+      renderResidents();
+      renderSignups();
+      loadSettings();
+      $("loginPanel").classList.add("hidden");
+      $("dashboard").classList.remove("hidden");
+      $("logoutButton").classList.remove("hidden");
+    }
+
+    $("loginForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      clearMessage($("loginMessage"));
+      try {
+        await api("/api/admin/login", {
+          method: "POST",
+          body: JSON.stringify({ code: $("accessCode").value })
+        });
+        $("accessCode").value = "";
+        await loadDashboard();
+      } catch (error) {
+        showMessage($("loginMessage"), error.message, "error");
+      }
+    });
+
+    $("logoutButton").addEventListener("click", async () => {
+      try { await api("/api/admin/logout", { method: "POST", body: "{}" }); } catch (error) {
+        showMessage($("dashboardMessage"), error.message, "error");
+      }
+      $("dashboard").classList.add("hidden");
+      $("logoutButton").classList.add("hidden");
+      $("loginPanel").classList.remove("hidden");
+    });
+
+    document.querySelectorAll("[data-tab]").forEach(button => {
+      button.addEventListener("click", () => switchTab(button.dataset.tab));
+    });
+
+    $("eventForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const id = $("eventId").value || crypto.randomUUID();
+      const item = {
+        id,
+        title: $("eventTitle").value.trim(),
+        date: $("eventDate").value,
+        category: $("eventCategory").value.trim(),
+        location: $("eventLocation").value.trim(),
+        price: Number($("eventPrice").value || 0),
+        image: $("eventImage").value.trim(),
+        artists: $("eventArtists").value.trim(),
+        raUrl: $("eventRaUrl").value.trim(),
+        instagramUrl: $("eventInstagramUrl").value.trim(),
+        description: $("eventDescription").value.trim(),
+        featured: $("eventFeatured").checked,
+        visible: $("eventVisible").checked,
+        sortOrder: 0
+      };
+      const index = state.events.findIndex(existing => existing.id === id);
+      if (index < 0) state.events.push(item);
+      else state.events[index] = item;
+      renderEvents();
+      formEvent();
+      showMessage($("dashboardMessage"), "Event added to your unsaved changes. Select Save all changes to publish it.", "success");
+    });
+
+    $("eventCancel").addEventListener("click", () => formEvent());
+    $("eventList").addEventListener("click", event => {
+      const editId = event.target.dataset.editEvent;
+      const deleteId = event.target.dataset.deleteEvent;
+      if (editId) formEvent(state.events.find(item => item.id === editId));
+      if (deleteId && confirm("Delete this event? Save all changes to publish the removal.")) {
+        state.events = state.events.filter(item => item.id !== deleteId);
+        renderEvents();
+      }
+    });
+
+    $("residentForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const id = $("residentId").value || crypto.randomUUID();
+      const item = {
+        id,
+        name: $("residentName").value.trim(),
+        role: $("residentRole").value.trim(),
+        bio: $("residentBio").value.trim(),
+        image: $("residentImage").value.trim(),
+        visible: $("residentVisible").checked,
+        sortOrder: state.residents.find(existing => existing.id === id)?.sortOrder ?? state.residents.length
+      };
+      const index = state.residents.findIndex(existing => existing.id === id);
+      if (index < 0) state.residents.push(item);
+      else state.residents[index] = item;
+      renderResidents();
+      formResident();
+      showMessage($("dashboardMessage"), "Resident added to your unsaved changes. Select Save all changes to publish it.", "success");
+    });
+
+    $("residentCancel").addEventListener("click", () => formResident());
+    $("residentList").addEventListener("click", event => {
+      const editId = event.target.dataset.editResident;
+      const deleteId = event.target.dataset.deleteResident;
+      if (editId) formResident(state.residents.find(item => item.id === editId));
+      if (deleteId && confirm("Delete this resident? Save all changes to publish the removal.")) {
+        state.residents = state.residents.filter(item => item.id !== deleteId);
+        renderResidents();
+      }
+    });
+
+    $("saveButton").addEventListener("click", async () => {
+      clearMessage($("dashboardMessage"));
+      state.settings.hero_image_url = $("heroImageUrl").value.trim();
+      state.settings.community_image_url = $("communityImageUrl").value.trim();
+      try {
+        await api("/api/admin/data", {
+          method: "PUT",
+          body: JSON.stringify({
+            events: state.events,
+            residents: state.residents,
+            settings: state.settings
+          })
+        });
+        await loadDashboard();
+        showMessage($("dashboardMessage"), "All changes are saved and live.", "success");
+      } catch (error) {
+        showMessage($("dashboardMessage"), error.message, "error");
+      }
+    });
+
+    $("eventImage").addEventListener("input", () => setPreview("eventImage", "eventImagePreview"));
+    $("residentImage").addEventListener("input", () => setPreview("residentImage", "residentImagePreview"));
+    $("heroImageUrl").addEventListener("input", () => setPreview("heroImageUrl", "heroImagePreview"));
+    $("communityImageUrl").addEventListener("input", () => setPreview("communityImageUrl", "communityImagePreview"));
+
+    [
+      ["eventImageFile", "eventImage", "eventImagePreview"],
+      ["residentImageFile", "residentImage", "residentImagePreview"],
+      ["heroImageFile", "heroImageUrl", "heroImagePreview"],
+      ["communityImageFile", "communityImageUrl", "communityImagePreview"]
+    ].forEach(([fileId, inputId, previewId]) => {
+      $(fileId).addEventListener("change", async () => {
+        try {
+          await uploadImage(fileId, inputId, previewId);
+          showMessage($("dashboardMessage"), "Image uploaded. Save all changes to use it on the website.", "success");
+        } catch (error) {
+          showMessage($("dashboardMessage"), error.message, "error");
+        }
+      });
+    });
+
+    $("exportSignups").addEventListener("click", () => {
+      const csvCell = value => {
+        let text = String(value ?? "");
+        if (/^[=+\-@]/.test(text)) text = `'${text}`;
+        return `"${text.replace(/"/g, '""')}"`;
+      };
+      const rows = [["email", "consented_at", "created_at"], ...state.signups.map(item => [
+        item.email, item.consented_at, item.created_at
+      ])];
+      const csv = rows.map(row => row.map(csvCell).join(",")).join("\r\n");
+      const link = document.createElement("a");
+      const objectUrl = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      link.href = objectUrl;
+      link.download = "catacombs-email-signups.csv";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+    });
+
+    $("signupList").addEventListener("click", async event => {
+      const id = event.target.dataset.deleteSignup;
+      if (!id || !confirm("Remove this email address from the list?")) return;
+      try {
+        await api(`/api/admin/subscribers/${encodeURIComponent(id)}`, { method: "DELETE" });
+        state.signups = state.signups.filter(item => item.id !== id);
+        renderSignups();
+      } catch (error) {
+        showMessage($("dashboardMessage"), error.message, "error");
+      }
+    });
+
+    api("/api/admin/session").then(result => {
+      if (result.authenticated) loadDashboard().catch(error => showMessage($("loginMessage"), error.message, "error"));
+    }).catch(error => {
+      if (error.status === 403) {
+        showMessage($("loginMessage"), "Admin sign-in is available after the Cloudflare backend is deployed; it cannot authenticate from the local file preview.", "error");
+      } else if (error.status !== 401) {
+        showMessage($("loginMessage"), error.message, "error");
+      }
+    });
+  </script>
+</body>
+</html>

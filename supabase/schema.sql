@@ -6,7 +6,7 @@ create table if not exists public.events (
   event_date date not null,
   category text not null default '',
   location text not null default '',
-  price numeric(10, 2) not null default 0,
+  price numeric(10, 2) default 0,
   image_url text,
   description text not null default '',
   artists text not null default '',
@@ -17,6 +17,8 @@ create table if not exists public.events (
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+alter table public.events alter column price drop not null;
 
 create table if not exists public.residents (
   id uuid primary key default gen_random_uuid(),
@@ -51,6 +53,21 @@ revoke all on public.events, public.residents, public.site_settings, public.loya
 grant usage on schema public to service_role;
 grant select, insert, update, delete on public.events, public.residents, public.site_settings, public.loyalty_signups
   to service_role;
+
+insert into public.events
+  (title, event_date, category, location, price, image_url, description, artists, instagram_url, featured, sort_order)
+select
+  'The Good Room x MTRPLS x Distort Series x Catacombs: Perc', '2026-12-28', 'Techno',
+  'Savoy, Cork, Ireland', null,
+  'https://images.pexels.com/photos/5192289/pexels-photo-5192289.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'A two-room techno night headlined by Perc and Decadance. 20:00–01:00. Tickets go on sale Friday via Resident Advisor and Eventbrite.',
+  'Perc · Decadance · Cerys · RiaStartha · Taurean · Tiarnola',
+  'https://www.instagram.com/mtrplstechno/p/Df5Cbh4DIHq/', true, 0
+where not exists (
+  select 1 from public.events
+  where title = 'The Good Room x MTRPLS x Distort Series x Catacombs: Perc'
+    and event_date = '2026-12-28'
+);
 
 insert into public.events
   (title, event_date, category, location, price, image_url, description, artists, ra_url, instagram_url, sort_order)
@@ -125,7 +142,7 @@ begin
        (item.value->>'date')::date,
        coalesce(item.value->>'category', ''),
        coalesce(item.value->>'location', ''),
-       coalesce(nullif(item.value->>'price', '')::numeric, 0),
+       nullif(item.value->>'price', '')::numeric,
        nullif(item.value->>'image', ''),
        coalesce(item.value->>'description', ''),
        coalesce(item.value->>'artists', ''),

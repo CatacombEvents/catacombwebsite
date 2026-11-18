@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#171714">
 <meta name="description" content="CATACOMBS — Independent music, culture and events from Cork, Ireland. Techno, markets, orchestra and art.">
-<title>UNDERGROUND SOUNDS — CATACOMBS</title>
+<title>THE ALTERNATIVE — CATACOMBS</title>
 
 <!-- Typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -988,12 +988,12 @@ footer {
     <div class="hero-kicker">INDEPENDENT CULTURE · CORK, IRELAND</div>
 
     <h1>
-      UNDERGROUND<br>
-      <span>SOUNDS</span>
+      THE<br>
+      <span>ALTERNATIVE</span>
     </h1>
 
     <p class="hero-description">
-      We put on Cork events around techno, markets, orchestra and art.
+      Curating events in the spaces of techno, art, orchestra and social events.
     </p>
 
     <div class="hero-actions">
@@ -1310,6 +1310,19 @@ footer {
 
 const events = [
   {
+    "id": 4,
+    "title": "The Good Room x MTRPLS x Distort Series x Catacombs: Perc",
+    "date": "2026-12-28",
+    "category": "Techno",
+    "location": "Savoy, Cork, Ireland",
+    "price": null,
+    "image": "https://images.pexels.com/photos/5192289/pexels-photo-5192289.jpeg?auto=compress&cs=tinysrgb&w=900",
+    "description": "A two-room techno night headlined by Perc and Decadance. 20:00–01:00. Tickets go on sale Friday via Resident Advisor and Eventbrite.",
+    "artists": "Perc · Decadance · Cerys · RiaStartha · Taurean · Tiarnola",
+    "featured": true,
+    "instagramUrl": "https://www.instagram.com/mtrplstechno/p/Df5Cbh4DIHq/"
+  },
+  {
     "id": 1,
     "title": "Dylan Fogarty Halloween Night",
     "date": "2026-10-31",
@@ -1441,7 +1454,7 @@ function renderFeatured() {
         <h3>${escapeHtml(event.title)}</h3>
         <p>${escapeHtml(event.description)}</p>
         <div class="event-bottom">
-          <span class="event-price">FROM €${escapeHtml(event.price)}</span>
+          <span class="event-price">${event.price == null ? "TICKETS ON SALE FRI" : `FROM €${escapeHtml(event.price)}`}</span>
           ${safeExternalUrl(event.raUrl) ? `<a class="text-link" href="${escapeHtml(safeExternalUrl(event.raUrl))}" target="_blank" rel="noopener">View on RA ↗</a>` : safeExternalUrl(event.instagramUrl) ? `<a class="text-link" href="${escapeHtml(safeExternalUrl(event.instagramUrl))}" target="_blank" rel="noopener">View event ↗</a>` : ""}
         </div>
       </div>

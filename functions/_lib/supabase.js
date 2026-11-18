@@ -6,14 +6,17 @@ export async function supabaseRequest(env, path, options = {}) {
   }
 
   const baseUrl = env.SUPABASE_URL.replace(/\/+$/, "");
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  const headers = {
+    apikey: key,
+    "content-type": "application/json",
+    ...(key.startsWith("sb_secret_") ? {} : { authorization: `Bearer ${key}` }),
+    ...options.headers
+  };
+
   const response = await fetch(`${baseUrl}/rest/v1/${path}`, {
     ...options,
-    headers: {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      "content-type": "application/json",
-      ...options.headers
-    }
+    headers
   });
 
   if (!response.ok) {

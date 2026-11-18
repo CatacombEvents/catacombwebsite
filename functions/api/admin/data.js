@@ -52,8 +52,8 @@ function validatePayload(payload) {
     if (!DATE.test(date) || new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) !== date) {
       throw new Error(`Event ${index + 1} needs a valid YYYY-MM-DD date.`);
     }
-    const price = Number(event.price ?? 0);
-    if (!Number.isFinite(price) || price < 0 || price > 100000) {
+    const price = event.price == null || event.price === "" ? null : Number(event.price);
+    if (price !== null && (!Number.isFinite(price) || price < 0 || price > 100000)) {
       throw new Error(`Event ${index + 1} has an invalid price.`);
     }
     const raUrl = safeUrl(event.raUrl, "Resident Advisor link", { ra: true });

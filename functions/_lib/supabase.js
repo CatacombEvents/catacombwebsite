@@ -36,7 +36,7 @@ export function eventFromRow(row) {
     date: row.event_date,
     category: row.category,
     location: row.location,
-    price: Number(row.price),
+    price: row.price == null ? null : Number(row.price),
     image: row.image_url,
     description: row.description,
     artists: row.artists,

@@ -118,7 +118,7 @@
             <div class="field"><label for="eventDate">Date *</label><input id="eventDate" type="date" required></div>
             <div class="field"><label for="eventCategory">Category</label><input id="eventCategory" maxlength="120" placeholder="Techno · Live"></div>
             <div class="field"><label for="eventLocation">Venue</label><input id="eventLocation" maxlength="240" placeholder="Venue, Cork"></div>
-            <div class="field"><label for="eventPrice">Ticket price (€)</label><input id="eventPrice" type="number" min="0" step="0.01" value="0"></div>
+            <div class="field"><label for="eventPrice">Ticket price (€)</label><input id="eventPrice" type="number" min="0" step="0.01" placeholder="Leave blank until announced"></div>
             <div class="field"><label for="eventImage">Event image URL</label><input id="eventImage" type="url" placeholder="https://..."></div>
             <div class="field"><label for="eventImageFile">Or upload an image (JPG, PNG, WebP, AVIF; max 5 MB)</label><input id="eventImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></div>
             <div class="field"><label for="eventArtists">Line-up</label><input id="eventArtists" maxlength="1000"></div>
@@ -312,7 +312,7 @@
       $("eventDate").value = event.date || "";
       $("eventCategory").value = event.category || "";
       $("eventLocation").value = event.location || "";
-      $("eventPrice").value = event.price ?? 0;
+      $("eventPrice").value = event.price ?? "";
       $("eventImage").value = event.image || "";
       $("eventArtists").value = event.artists || "";
       $("eventRaUrl").value = event.raUrl || "";
@@ -396,7 +396,7 @@
         date: $("eventDate").value,
         category: $("eventCategory").value.trim(),
         location: $("eventLocation").value.trim(),
-        price: Number($("eventPrice").value || 0),
+        price: $("eventPrice").value === "" ? null : Number($("eventPrice").value),
         image: $("eventImage").value.trim(),
         artists: $("eventArtists").value.trim(),
         raUrl: $("eventRaUrl").value.trim(),

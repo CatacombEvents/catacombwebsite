@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#171714">
+<meta name="theme-color" content="#27384a">
 <meta name="description" content="Our sounds, your place. Catacombs brings techno, art, orchestra and social events to Cork, Ireland.">
 <title>OUR SOUNDS, YOUR PLACE — CATACOMBS</title>
 <link rel="canonical" href="https://catacombsevents.com/">
@@ -13,12 +13,12 @@
 <meta property="og:url" content="https://catacombsevents.com/">
 <meta property="og:title" content="OUR SOUNDS, YOUR PLACE — CATACOMBS">
 <meta property="og:description" content="Curating events in the spaces of techno, art, orchestra and social events.">
-<meta property="og:image" content="https://images.pexels.com/photos/9534908/pexels-photo-9534908.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200">
-<meta property="og:image:alt" content="A live music event in Cork">
+<meta property="og:image" content="https://catacombsevents.com/assets/hero-portrait.jpeg">
+<meta property="og:image:alt" content="A person at a Catacombs event">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="OUR SOUNDS, YOUR PLACE — CATACOMBS">
 <meta name="twitter:description" content="Curating events in the spaces of techno, art, orchestra and social events.">
-<meta name="twitter:image" content="https://images.pexels.com/photos/9534908/pexels-photo-9534908.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200">
+<meta name="twitter:image" content="https://catacombsevents.com/assets/hero-portrait.jpeg">
 
 <!-- Typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,14 +27,17 @@
 
 <style>
 :root {
-  --black: #171714;
-  --cream: #f0eee6;
-  --paper: #e6e2d7;
-  --red: #bd2929;
+  --black: #27384a;
+  --cream: #f6efef;
+  --paper: #e7ece4;
+  --red: #d4a0aa;
+  --red-ink: #925865;
   --orange: var(--red);
-  --olive: #85866a;
-  --grey: #77766e;
-  --line: rgba(23,23,20,.2);
+  --olive: #91a58d;
+  --grey: #5d6c75;
+  --muted-light: #cbd5d4;
+  --line: rgba(39,56,74,.2);
+  --line-dark: rgba(203,213,212,.24);
   --display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
   --heading: "DM Sans", sans-serif;
   --body: "DM Sans", sans-serif;
@@ -77,7 +80,7 @@ img {
 
 ::selection {
   background: var(--red);
-  color: white;
+  color: var(--black);
 }
 
 /* NAVIGATION */
@@ -122,7 +125,7 @@ img {
 
 .nav-ticket {
   background: var(--red);
-  color: white;
+  color: var(--black);
   padding: 13px 20px;
   font-size: 11px;
   font-weight: 800;
@@ -151,7 +154,7 @@ section {
   letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 20px;
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .section-heading {
@@ -176,7 +179,7 @@ section {
   justify-content: center;
   padding: 16px 25px;
   background: var(--red);
-  color: white;
+  color: var(--black);
   border: 1px solid var(--red);
   text-transform: uppercase;
   font-size: 11px;
@@ -188,7 +191,7 @@ section {
 
 .btn:hover {
   background: transparent;
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .btn-dark {
@@ -202,13 +205,13 @@ section {
 
 .btn-outline {
   background: transparent;
-  border-color: var(--black);
+  border-color: var(--olive);
   color: var(--black);
 }
 
 .btn-outline:hover {
-  background: var(--black);
-  color: var(--cream);
+  background: var(--olive);
+  color: var(--black);
 }
 
 /* HERO */
@@ -229,13 +232,13 @@ section {
 .hero-image {
   position: absolute;
   inset: 0;
-  opacity: .43;
+  opacity: .7;
   background-image:
-    linear-gradient(90deg, rgba(23,23,20,.96) 0%, rgba(23,23,20,.55) 65%, rgba(23,23,20,.3)),
-    var(--hero-image, url("https://images.pexels.com/photos/9534908/pexels-photo-9534908.jpeg?auto=compress&cs=tinysrgb&w=2000"));
+    linear-gradient(90deg, rgba(39,56,74,.92) 0%, rgba(39,56,74,.7) 65%, rgba(39,56,74,.4)),
+    var(--hero-image, url("assets/hero-portrait.jpeg"));
   background-position: center;
   background-size: cover;
-  filter: saturate(.65);
+  filter: saturate(.75);
 }
 
 .hero-content {
@@ -255,7 +258,7 @@ section {
 .hero h1 {
   font-family: var(--display);
   font-size: clamp(90px, 16vw, 220px);
-  line-height: .72;
+  line-height: .82;
   letter-spacing: -5px;
   text-transform: uppercase;
 }
@@ -268,7 +271,7 @@ section {
 
 .hero-description {
   max-width: 410px;
-  color: #c3c0b5;
+  color: var(--muted-light);
   font-size: 14px;
   line-height: 1.7;
   margin: 40px 0 28px;
@@ -298,14 +301,14 @@ section {
   font-size: 10px;
   letter-spacing: 2px;
   writing-mode: vertical-rl;
-  color: #c3c0b5;
+  color: var(--muted-light);
 }
 
 /* INTRO STRIP */
 
 .marquee {
-  background: var(--red);
-  color: white;
+  background: var(--olive);
+  color: var(--black);
   padding: 17px 0;
   overflow: hidden;
   white-space: nowrap;
@@ -342,7 +345,7 @@ section {
 }
 
 .intro h2 em {
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .intro-text {
@@ -417,7 +420,7 @@ section {
 .event-category {
   font-family: var(--mono);
   font-size: 9px;
-  color: var(--red);
+  color: var(--red-ink);
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -452,7 +455,7 @@ section {
 .text-link {
   border: none;
   background: none;
-  color: var(--red);
+  color: var(--red-ink);
   font-weight: 800;
   font-size: 11px;
   text-transform: uppercase;
@@ -496,7 +499,7 @@ section {
 .archive-row .date {
   font-family: var(--mono);
   font-size: 11px;
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .archive-event h3 {
@@ -520,7 +523,7 @@ section {
 .archive-row button, .archive-row a {
   background: transparent;
   border: none;
-  color: var(--red);
+  color: var(--red-ink);
   text-transform: uppercase;
   font-size: 10px;
   font-weight: 800;
@@ -541,7 +544,8 @@ section {
   color: var(--cream);
 }
 
-.friends .section-intro { color: #aaa79d; }
+.friends .section-intro { color: var(--muted-light); }
+.friends .eyebrow { color: var(--red); }
 
 .friends-layout {
   display: grid;
@@ -551,7 +555,7 @@ section {
   margin-top: 50px;
 }
 
-.artist-list { border-top: 1px solid #45443e; }
+.artist-list { border-top: 1px solid var(--line-dark); }
 
 .artist {
   display: flex;
@@ -559,7 +563,7 @@ section {
   align-items: center;
   gap: 20px;
   padding: 23px 0;
-  border-bottom: 1px solid #45443e;
+  border-bottom: 1px solid var(--line-dark);
 }
 
 .resident-details {
@@ -584,7 +588,7 @@ section {
   margin: 0;
 }
 
-.artist p { margin: 8px 0 0; color: #aaa79d; font-size: 12px; line-height: 1.6; }
+.artist p { margin: 8px 0 0; color: var(--muted-light); font-size: 12px; line-height: 1.6; }
 
 .artist span {
   color: var(--red);
@@ -608,10 +612,10 @@ section {
 /* COMMUNITY */
 
 .community {
-  background-color: var(--red);
+  background-color: var(--olive);
   background-image:
-    linear-gradient(rgba(189,41,41,.9), rgba(189,41,41,.9)),
-    var(--community-image, none);
+    linear-gradient(rgba(39,56,74,.86), rgba(39,56,74,.86)),
+    var(--community-image, url("assets/catacombs-collage.jpeg"));
   background-position: center;
   background-size: cover;
   color: white;
@@ -619,7 +623,7 @@ section {
   padding: 115px 7%;
 }
 
-.community .eyebrow { color: var(--cream); }
+.community .eyebrow { color: var(--red); }
 
 .community h2 {
   font-family: var(--display);
@@ -701,7 +705,7 @@ footer {
 }
 
 .footer-main p {
-  color: #aaa79d;
+  color: var(--muted-light);
   font-size: 12px;
   line-height: 1.8;
   max-width: 300px;
@@ -719,15 +723,15 @@ footer {
   display: block;
   font-size: 12px;
   margin-bottom: 14px;
-  color: #c5c2b8;
+  color: var(--muted-light);
 }
 
 .footer-bottom {
-  border-top: 1px solid #45443e;
+  border-top: 1px solid var(--line-dark);
   padding-top: 22px;
   display: flex;
   justify-content: space-between;
-  color: #aaa79d;
+  color: var(--muted-light);
   font-family: var(--mono);
   font-size: 9px;
   gap: 15px;
@@ -856,7 +860,7 @@ footer {
 .cookie-banner button {
   border: 0;
   background: var(--red);
-  color: white;
+  color: var(--black);
   padding: 12px 17px;
   white-space: nowrap;
   font-size: 10px;
@@ -869,7 +873,7 @@ footer {
   font-family: var(--mono);
   font-size: 11px;
   margin-top: 15px;
-  color: var(--red);
+  color: var(--red-ink);
 }
 
 .consent-row {
@@ -877,7 +881,7 @@ footer {
   gap: 9px;
   align-items: flex-start;
   margin: 14px 0;
-  color: #77756e;
+  color: var(--grey);
   font-size: 11px;
   line-height: 1.55;
 }
@@ -959,8 +963,16 @@ footer {
 
 /* ACCESSIBILITY */
 :focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--red-ink);
   outline-offset: 4px;
+}
+
+.nav :focus-visible,
+.hero :focus-visible,
+.friends :focus-visible,
+.community :focus-visible,
+footer :focus-visible {
+  outline-color: var(--olive);
 }
 
 @media(prefers-reduced-motion:reduce) {
@@ -1383,7 +1395,7 @@ const residents = [
   { id: "frequency-obaudire", name: "Frequency Obaudire", role: "DJ / Producer", bio: "", image: "", visible: true, sortOrder: 0 }
 ];
 let siteSettings = {
-  hero_image_url: "https://images.pexels.com/photos/9534908/pexels-photo-9534908.jpeg?auto=compress&cs=tinysrgb&w=2000",
+  hero_image_url: "",
   community_image_url: ""
 };
 
@@ -1430,7 +1442,9 @@ function applySiteBackgrounds() {
   const hero = document.querySelector(".hero-image");
   const community = document.querySelector(".community");
 
-  if (heroUrl) hero.style.setProperty("--hero-image", `url("${heroUrl.replace(/["\\]/g, "")}")`);
+  if (heroUrl && !heroUrl.startsWith("https://images.pexels.com/photos/9534908/")) {
+    hero.style.setProperty("--hero-image", `url("${heroUrl.replace(/["\\]/g, "")}")`);
+  }
   else hero.style.removeProperty("--hero-image");
   if (communityUrl) community.style.setProperty("--community-image", `url("${communityUrl.replace(/["\\]/g, "")}")`);
   else community.style.removeProperty("--community-image");

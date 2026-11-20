@@ -111,8 +111,8 @@ select 'Frequency Obaudire', 'DJ / Producer', '', 0
 where not exists (select 1 from public.residents where name = 'Frequency Obaudire');
 
 insert into public.site_settings (key, value) values
-  ('hero_image_url', 'https://images.pexels.com/photos/9534908/pexels-photo-9534908.jpeg?auto=compress&cs=tinysrgb&w=2000'),
-  ('community_image_url', '')
+  ('hero_image_url', 'https://catacombsevents.com/assets/hero-portrait.jpeg'),
+  ('community_image_url', 'https://catacombsevents.com/assets/catacombs-collage.jpeg')
 on conflict (key) do nothing;
 
 create or replace function public.replace_site_content(payload jsonb)
